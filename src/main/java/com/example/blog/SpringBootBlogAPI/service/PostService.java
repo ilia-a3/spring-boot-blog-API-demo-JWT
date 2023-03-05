@@ -3,6 +3,8 @@ package com.example.blog.SpringBootBlogAPI.service;
 import com.example.blog.SpringBootBlogAPI.payload.PostDto;
 import com.example.blog.SpringBootBlogAPI.payload.PostResponse;
 
+import java.util.List;
+
 public interface PostService {
     PostDto createPost(PostDto postDto);
 
@@ -15,4 +17,6 @@ public interface PostService {
 
     void deletePost(long id);
     //    String deletePost(long id);
+
+    List<PostDto> getPostsByCategory(long categoryId);
 }
