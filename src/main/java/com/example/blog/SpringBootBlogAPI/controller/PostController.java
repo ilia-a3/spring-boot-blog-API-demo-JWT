@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/posts")
+//@RequestMapping("/api/posts")
+@RequestMapping("/api/v1/posts")
+//@RequestMapping("/api")
 public class PostController {
     private PostService postService;
 
@@ -23,12 +25,12 @@ public class PostController {
 
     //  create blog post rest api
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
+    @PostMapping("v1/posts")
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postData) {
         return new ResponseEntity<>(postService.createPost(postData), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("v1/posts")
     //    public List<PostDto> getAllPosts(
     public PostResponse getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -39,19 +41,62 @@ public class PostController {
         return postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable long id) {
+    //  using URI versioning
+    @GetMapping("v1/posts/{id}")
+
+//  using query param versioning
+//    @GetMapping(value = "posts/{id}", params = "version=1")
+
+//  using headers versioning
+//    @GetMapping(value = "posts/{id}", headers = "X-API-VERSION=1")
+
+//  using content negotiation versioning
+//    @GetMapping(value = "posts/{id}", produces = "application/vnd.example.v1+json")
+    public ResponseEntity<PostDto> getPostByIdV1(@PathVariable long id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
 
+//    // get post by id V2
+////  using URI versioning
+//    @GetMapping("v2/posts/{id}")
+//
+////  using query param versioning
+////    @GetMapping(value = "posts/{id}", params = "version=2")
+//
+////  using headers versioning
+////    @GetMapping(value = "posts/{id}", headers = "X-API-VERSION=2")
+//
+////  using content negotiation versioning
+////    @GetMapping(value = "posts/{id}", produces = "application/vnd.example.v2+json")
+//    public ResponseEntity<PostDtoV2> getPostByIdV2(@PathVariable long id) {
+//        PostDto v1 = postService.getPostById(id);
+//
+//        PostDtoV2 v2 = new PostDtoV2();
+//        v2.setId(v1.getId());
+//        v2.setComments(v1.getComments());
+//        v2.setTitle(v1.getTitle());
+//        v2.setContent(v1.getContent());
+//        v2.setDescription(v1.getDescription());
+//        v2.setCategoryId(v1.getCategoryId());
+//
+//        ArrayList<String> tags = new ArrayList<String>();
+//        tags.add("Java");
+//        tags.add("Spring Boot");
+//        tags.add("AWS");
+//
+//        v2.setTags(tags);
+//
+//        return ResponseEntity.ok(v2);
+//    }
+
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("{id}")
+    @PutMapping("v1/posts/{id}")
     public ResponseEntity<PostDto> updatePostById(@Valid @RequestBody PostDto postDto, @PathVariable long id) {
         return ResponseEntity.ok(postService.updatePostById(postDto, id));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("{id}")
+    @DeleteMapping("v1/posts/{id}")
     public ResponseEntity<String> deletePostById(@PathVariable long id) {
         postService.deletePost(id);
         return new ResponseEntity<>("Post entity deleted successfully", HttpStatus.OK);
@@ -59,8 +104,8 @@ public class PostController {
 
     //  Build GET posts by category REST API
     //  http://localhost:8080/api/posts/category/1
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable long categoryId){
+    @GetMapping("v1/posts/category/{categoryId}")
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable long categoryId) {
         return ResponseEntity.ok(postService.getPostsByCategory(categoryId));
     }
 }
