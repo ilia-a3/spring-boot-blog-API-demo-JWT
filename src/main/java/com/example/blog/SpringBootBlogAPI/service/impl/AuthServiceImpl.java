@@ -38,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(LoginDto loginDto) {
+        System.out.println(loginDto.getUsernameOrEmail()+loginDto.getPassword());
 
         Authentication auth =  authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -45,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
                         loginDto.getPassword()
                 )
         );
+        System.out.println("made it here");
         SecurityContextHolder.getContext().setAuthentication(auth);
         String token = jwtTokenProvider.generateToken(auth);
         return token;
@@ -69,7 +71,6 @@ public class AuthServiceImpl implements AuthService {
         Role userRole = roleRepository.findByName("ROLE_USER").get();
         roles.add(userRole);
         user.setRoles(roles);
-
         userRepository.save(user);
         return "User registered successfully";
     }

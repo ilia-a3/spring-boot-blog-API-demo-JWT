@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 //@RequestMapping("/api/posts")
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/")
 //@RequestMapping("/api")
 public class PostController {
     private PostService postService;
